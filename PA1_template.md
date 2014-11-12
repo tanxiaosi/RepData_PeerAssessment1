@@ -1,11 +1,6 @@
----
-title: "Reproducible Research: Peer Assessment 1"
-author: "Xiaosi Tan"
-date: "2014-11-11"
-output: 
-  html_document:
-    keep_md: true
----
+# Reproducible Research: Peer Assessment 1
+Xiaosi Tan  
+2014-11-11  
 
 ## Data
 The data for this assignment can be downloaded from the course web site:
@@ -26,7 +21,8 @@ The dataset is stored in a comma-separated-value (CSV) file and there are a tota
 
 After loading the data, we transform the date column to the Date format.
 
-```{r}
+
+```r
 # Check the existence of the file and unzip the .zip pack
 file <- "./activity.csv"
 if (!file.exists(file)) {
@@ -39,7 +35,8 @@ activitydata$date <- as.Date(activitydata$date, "%Y-%m-%d")
 ```
 
 ## What is mean total number of steps taken per day?
-```{r}
+
+```r
 ## compute the total number of steps/day, and the mean and median
 stepsperday <- aggregate(steps ~ date, data = activitydata, sum, na.rm=TRUE)
 meanperday <- mean(stepsperday$steps)
@@ -51,6 +48,8 @@ hist(stepsperday$steps, main = "Frequency of Steps Taken Per Day",
      xlim = c(0, 25000), col = "blue")
 ```
 
+![](./PA1_template_files/figure-html/unnamed-chunk-2-1.png) 
+
 The **mean** of steps taken per day is **10766**, the **median** is **10765**.
 
 The histogram shows there're about **36** days which has steps above the mean. This number agrees with the number of weekdays in the two months.
@@ -59,7 +58,8 @@ The histogram shows there're about **36** days which has steps above the mean. T
 
 The interval was marked as a number, in which the first 1 or 2 digits shows the number of hours passed and the last 2 digits shows the number of miniutes passed in the new hour. We add a new column by transformation of the interval column, which contains integers n, n means the n-th interval of the day.
 
-```{r,message=FALSE}
+
+```r
 library(dplyr)
 # create a new column which marks the number of the 5-min interval of the day
 activitydata <- mutate(activitydata, 
@@ -72,7 +72,11 @@ plot(timeseries$interval1, timeseries$steps, type = "l", xlab = "5-minute Interv
         ylab = "Daily Average (steps)", 
         main = "Average Number of Steps During 5-minute Time Intervals In a 24-hour Day", 
         col = "blue", xlim = c(0,300))
+```
 
+![](./PA1_template_files/figure-html/unnamed-chunk-3-1.png) 
+
+```r
 # This function is to get the actual time period of the day when input the number
 # of the 5-min interval.
 gettimep <- function(x) {
@@ -89,13 +93,15 @@ The 5-min interval with **maximum** average number of steps is interval **104**,
 The graph also reaches **local maxima** at **147**, **191** ,**226**, which correspond to **12:15 ~ 12:20**, **15:55 ~ 16:00**, **18:50 ~ 18:55**.
 
 ## Imputing missing values
-```{r}
+
+```r
 NAcount <- sum(is.na(activitydata$steps))
 ```
 There are **2304 missing values** in the data.
 
 Missing values are filled with the average of steps in each 5-min interval across all dates. 
-```{r}
+
+```r
 library(reshape2)
 #dcast the data into a wide form with steps, replace the NAs with the average calculated
 #in the timeseries, and reshape it back to the long format
@@ -109,7 +115,8 @@ a2$date <- as.Date(a2$date, "%Y-%m-%d")
 
 Make a histogram of the total number of steps taken each day after filing the missing values.
 
-```{r}
+
+```r
 stepsperday2 <- aggregate(steps ~ date, data = a2, sum, na.rm=TRUE)
 meanperday2 <- mean(stepsperday2$steps)
 medianperday2 <- median(stepsperday2$steps)
@@ -120,12 +127,15 @@ hist(stepsperday2$steps, main = "Frequency of Steps Taken Per Day",
      xlim = c(0, 25000), col = "blue")
 ```
 
+![](./PA1_template_files/figure-html/unnamed-chunk-6-1.png) 
+
 The **mean** of steps becomes **10766**. The **median** becomes **10766**.
 
 The mean and median of the data doesn't change a lot after filling the missing value. The histogram is also in a similar shape, so the distribution shape doesn't change a lot, only the counts increased. 
 
 ## Are there differences in activity patterns between weekdays and weekends?
-```{r}
+
+```r
 # This function decides each item of the input vector to be weekday or weekend
 # The input should be a vector of class date, the output is a vector with strins
 # of "weekday" and "weekend", indicating the day of the given date.
@@ -158,7 +168,8 @@ splot <- xyplot(steps ~ interval1 | day, stepsweekday, type = "l", layout = c(1,
                 xlab = "5-minute Interval (288 per Day)", ylab = "Daily Average (steps)")
 update(splot,
        main="Comparison of Average Number of Steps During 5-minute\nTime Intervals In a 24-hour   Day\nfor Weekend Days Versus Weekdays")
-
 ```
+
+![](./PA1_template_files/figure-html/unnamed-chunk-7-1.png) 
 On the weekdays, the average steps peaked at the 104 interval, which corresponds to **8:40 ~ 8:45**.
 There are also some local maxima but the maximum is the largest. On the weekends, we also have some peaks through the daytime, but it's distributed more uniformly than the weekdays.
