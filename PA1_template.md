@@ -42,6 +42,22 @@ stepsperday <- aggregate(steps ~ date, data = activitydata, sum, na.rm=TRUE)
 meanperday <- mean(stepsperday$steps)
 medianperday <- median(stepsperday$steps)
 
+meanperday
+```
+
+```
+## [1] 10766.19
+```
+
+```r
+medianperday
+```
+
+```
+## [1] 10765
+```
+
+```r
 hist(stepsperday$steps, main = "Frequency of Steps Taken Per Day", 
      xlab = "Daily Step Count Range",
      ylab = "Number of Days Step Count Range is Reached", breaks = 15,
@@ -96,6 +112,11 @@ The graph also reaches **local maxima** at **147**, **191** ,**226**, which corr
 
 ```r
 NAcount <- sum(is.na(activitydata$steps))
+NAcount
+```
+
+```
+## [1] 2304
 ```
 There are **2304 missing values** in the data.
 
@@ -121,6 +142,22 @@ stepsperday2 <- aggregate(steps ~ date, data = a2, sum, na.rm=TRUE)
 meanperday2 <- mean(stepsperday2$steps)
 medianperday2 <- median(stepsperday2$steps)
 
+meanperday2
+```
+
+```
+## [1] 10766.19
+```
+
+```r
+medianperday2
+```
+
+```
+## [1] 10766.19
+```
+
+```r
 hist(stepsperday2$steps, main = "Frequency of Steps Taken Per Day", 
      xlab = "Daily Step Count Range",
      ylab = "Number of Days Step Count Range is Reached", breaks = 15,
@@ -171,5 +208,6 @@ update(splot,
 ```
 
 ![](./PA1_template_files/figure-html/unnamed-chunk-7-1.png) 
+
 On the weekdays, the average steps peaked at the 104 interval, which corresponds to **8:40 ~ 8:45**.
 There are also some local maxima but the maximum is the largest. On the weekends, we also have some peaks through the daytime, but it's distributed more uniformly than the weekdays.
